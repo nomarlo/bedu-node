@@ -1,4 +1,4 @@
-const { Sequelize } = require('sequelize');
+const {Sequelize} = require('sequelize');
 
 // Importing models
 const Product = require('./models/Product');
@@ -7,27 +7,29 @@ const User = require('./models/User');
 const Order = require('./models/Order');
 
 // Database connection
-const sequelize = new Sequelize('ecomerceApi', 'miUsuarioEcomerceApi', 'toor', {
-  host: 'localhost',
-  dialect: 'mariadb',
-  logging: false,
+
+
+const sequelize = new Sequelize(process.env.MARIADB_DATABASE, process.env.MARIADB_USER, process.env.MARIADB_PASSWORD, {
+    host: process.env.MARIADB_HOST,
+    dialect: 'mariadb',
+    logging: false,
 });
 
 // Getting models
 const models = [
-  Product,
-  Review,
-  User,
-  Order,
+    Product,
+    Review,
+    User,
+    Order,
 ];
 
 // Registering models into Sequelize
 for (let model of models) {
-  model(sequelize);
+    model(sequelize);
 }
 
 // Configuring relations
-const { products, reviews, users, orders } = sequelize.models;
+const {products, reviews, users, orders} = sequelize.models;
 reviews.belongsTo(products); // Relation one-to-one in reviews table
 orders.belongsTo(users); // Relation: Order has one user
 orders.belongsTo(products); // Relation: Order has one product
